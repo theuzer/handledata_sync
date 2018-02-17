@@ -45,10 +45,12 @@ const updateGameIsProcessed = (id) => {
 exports.doQuery = (match, id) => {
   new sql.Request(dataConnection).query(getInsertTelemetryQuery(match))
     .then((response) => {
+      console.log('inserted', id);
       updateGameIsProcessed(id);
     })
     .catch((err) => {
       if (err.code === 'EREQUEST') {
+        console.log('has error', id);
         updateGameHasError(id);
       } else if (err.code === 'ETIMEOUT') {
         console.log(err.code, id);
