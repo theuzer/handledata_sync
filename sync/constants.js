@@ -3,4 +3,5 @@ module.exports = {
   checkIfGameExists: gameId => `select top(1) id from match where matchid = '${gameId}'`,
   updateGameAsProcessed: id => `update game set isProcessed = 1 where id = ${id}`,
   updateGameHasLeavers: id => `update game set HasLeavers = 1 where id = ${id}`,
+  updateGameHasError: id => `update game set HasError = 1 where id = ${id}`,
 };

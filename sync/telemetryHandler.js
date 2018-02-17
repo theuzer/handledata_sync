@@ -2,6 +2,7 @@ const sql = require('mssql');
 
 const logConnection = require('../database/azureDb').logConnection;
 const constants = require('./constants');
+const dataController = require('../controllers/dataController');
 
 // const sortByTimestamp = telemetry => telemetry.sort((a, b) => a.cursor - b.cursor);
 const filterTelemetry = (telemetry, type) => telemetry.filter(x => x.type === type);
@@ -137,6 +138,6 @@ exports.mapTelemetry = (telemetry, id) => {
       team2,
     };
 
-    dataController.insertTelemetry(match, id);
+    dataController.doQuery(match, id);
   }
 };
