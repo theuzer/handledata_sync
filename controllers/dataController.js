@@ -1,12 +1,11 @@
 const sql = require('mssql');
 
 const dataConnection = require('../database/azureDb').dataConnection;
-const logConnection = require('../database/azureDb').logConnection;
-const constants = require('../sync/constants');
+const updateLogGame = require('../sync/updateLogGame');
 
 const azureDateBuilder = (year, month, day, hour, minute, second) => `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 const dateBuilder = date => azureDateBuilder(date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
-const boolBuilder = bool => bool ? 1 : 0;
+const boolBuilder = bool => (bool ? 1 : 0);
 
 const insertChar = (teamNo, playerCode, teamCode, championCode, attach, mount, outfit, emote, br1, br2, br3, br4, br5, champLevel, champTime, totalTime, division, divisionRating, league, abilityUses, damageDone, damageReceived, deaths, disablesDone, disablesReceived, energyGained, energyUsed, healingDone, healingReceived, kills, score, timeAlive) => `EXECUTE InsertCharacter @gameTeamId = @team${teamNo}Id, @playerCode = '${playerCode}', @teamCode = '${teamCode}', @championCode = ${championCode}, @attachmentCode = ${attach}, @emoteCode = ${emote}, @mountCode = ${mount}, @outfitCode = ${outfit}, @br1 = ${br1}, @br2 = ${br2}, @br3 = ${br3}, @br4 = ${br4}, @br5 = ${br5}, @championLevel = ${champLevel}, @championTimePlayed = ${champTime}, @totalTimePlayed = ${totalTime}, @division = ${division}, @divisionRating = ${divisionRating}, @league = ${league}, @abilityUses = ${abilityUses}, @damageDone = ${damageDone}, @damageReceived = ${damageReceived}, @deaths = ${deaths}, @disablesDone = ${disablesDone}, @disablesReceived = ${disablesReceived}, @energyGained = ${energyGained}, @energyUsed = ${energyUsed}, @healingDone = ${healingDone}, @healingReceived = ${healingReceived}, @kills = ${kills}, @score = ${score}, @timeAlive = ${timeAlive};`;
 const insertMatch = (matchId, map, region, gameType, patch, isRanked, teamSize, date, numberOfRounds) => `EXEC @matchId = InsertMatch '${matchId}', '${map}', '${region}', '${gameType}', '${patch}', ${isRanked}, ${teamSize}, '${date}', ${numberOfRounds};`;
@@ -34,24 +33,16 @@ const getInsertTelemetryQuery = (match) => {
   return query;
 };
 
-const updateGameHasError = (id) => {
-  new sql.Request(logConnection).query(constants.updateGameHasError(id));
-};
-
-const updateGameIsProcessed = (id) => {
-  new sql.Request(logConnection).query(constants.updateGameIsProcessed(id));
-};
-
 exports.doQuery = (match, id) => {
   new sql.Request(dataConnection).query(getInsertTelemetryQuery(match))
-    .then((response) => {
+    .then(() => {
       console.log('inserted', id);
-      updateGameIsProcessed(id);
+      updateLogGame.updateGameIsProcessed(id);
     })
     .catch((err) => {
       if (err.code === 'EREQUEST') {
         console.log('has error', id);
-        updateGameHasError(id);
+        updateLogGame.updateGameHasError(id);
       } else if (err.code === 'ETIMEOUT') {
         console.log(err.code, id);
       }

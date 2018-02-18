@@ -1,8 +1,5 @@
-const sql = require('mssql');
-
-const logConnection = require('../database/azureDb').logConnection;
-const constants = require('./constants');
 const dataController = require('../controllers/dataController');
+const updateLogGame = require('./updateLogGame');
 
 // const sortByTimestamp = telemetry => telemetry.sort((a, b) => a.cursor - b.cursor);
 const filterTelemetry = (telemetry, type) => telemetry.filter(x => x.type === type);
@@ -103,18 +100,11 @@ const mapTeam = (teamNo, players, talents, win, rounds) => {
   };
 };
 
-const updateGameHasLeavers = (id) => {
-  new sql.Request(logConnection).query(constants.updateGameHasLeavers(id))
-    .catch((err) => {
-      console.log(4, err);
-    });
-};
-
 exports.mapTelemetry = (telemetry, id) => {
   const matchFinishEvent = extractMatchFinished(telemetry)[0].dataObject;
 
   if (matchFinishEvent.leavers.length !== 0) {
-    updateGameHasLeavers(id);
+    updateLogGame.updateGameHasLeavers(id);
   } else {
     const matchStartEvent = extractMatchStart(telemetry)[0].dataObject;
     const players = extractPlayers(telemetry);

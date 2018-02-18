@@ -5,6 +5,7 @@ const telemetryHandler = require('./telemetryHandler');
 const dataConnection = require('../database/azureDb').dataConnection;
 const logConnection = require('../database/azureDb').logConnection;
 const constants = require('./constants');
+const updateLogGame = require('./updateLogGame');
 
 const gamesQueue = [];
 let isRunning = false;
@@ -29,14 +30,7 @@ const getTelemetry = () => {
       }
     })
     .catch((err) => {
-      console.log(err);
-    });
-};
-
-const updateGameAsProcessed = (id) => {
-  new sql.Request(logConnection).query(constants.updateGameAsProcessed(id))
-    .catch((err) => {
-      console.log(3, err);
+      console.log('getTelemetry', err);
     });
 };
 
@@ -46,24 +40,25 @@ const checkIfGameExist = (id, gameId, stats) => {
       if (response.recordset.length === 0) {
         addGameToQueue({ id, gameId, stats });
       } else {
-        updateGameAsProcessed(id);
+        updateLogGame.updateGameAsProcessed(id);
       }
     })
     .catch((err) => {
-      console.log(2, err.code);
+      console.log('checkIfGamesExist', err.code);
     });
 };
 
 exports.syncGames = () => {
-  console.log('start');
+  console.time('get 2000 games');
   new sql.Request(logConnection).query(constants.getMatchesQuery)
     .then((response) => {
+      console.timeEnd('get 2000 games');
       response.recordset.forEach((game) => {
         checkIfGameExist(game.id, game.gameId, game.stats);
       });
     })
     .catch((err) => {
-      console.log(1, err.code);
+      console.log('syncGames', err.code);
     });
 };
 

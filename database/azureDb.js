@@ -1,19 +1,19 @@
 const sql = require('mssql');
 
 const logConfig = {
-  server: process.env.DB_LOG_SERVER || "testserver-logdata.database.windows.net",
-  database: process.env.DB_LOG_DATABASE || "MyDatabase",
-  user: process.env.DB_LOG_USERNAME || "david",
-  password: process.env.DB_LOG_PASSWORD || "Admin123",
+  server: process.env.DB_LOG_SERVER,
+  database: process.env.DB_LOG_DATABASE,
+  user: process.env.DB_LOG_USERNAME,
+  password: process.env.DB_LOG_PASSWORD,
   port: 1433,
   options: { encrypt: true },
 };
 
 const dataConfig = {
-  server: process.env.DB_DATA_SERVER || "testserver-handledata.database.windows.net",
-  database: process.env.DB_DATA_DATABASE || "Data",
-  user: process.env.DB_DATA_USERNAME || "david",
-  password: process.env.DB_DATA_PASSWORD || "Admin123",
+  server: process.env.DB_DATA_SERVER,
+  database: process.env.DB_DATA_DATABASE,
+  user: process.env.DB_DATA_USERNAME,
+  password: process.env.DB_DATA_PASSWORD,
   port: 1433,
   options: { encrypt: true },
 };
