@@ -44,7 +44,7 @@ const checkIfGameExist = (id, gameId, stats) => {
       }
     })
     .catch((err) => {
-      console.log('checkIfGamesExist', err);
+      console.log('checkIfGamesExist', err.code);
     });
 };
 
@@ -54,6 +54,7 @@ exports.syncGames = () => {
   new sql.Request(logConnection).query(constants.getMatchesQuery)
     .then((response) => {
       console.timeEnd('get 2000 games');
+      console.log(`got ${response.recordset.length} games`);
       response.recordset.forEach((game) => {
         checkIfGameExist(game.id, game.gameId, game.stats);
       });

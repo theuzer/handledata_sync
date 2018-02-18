@@ -36,12 +36,10 @@ const getInsertTelemetryQuery = (match) => {
 exports.doQuery = (match, id) => {
   new sql.Request(dataConnection).query(getInsertTelemetryQuery(match))
     .then(() => {
-      console.log('inserted', id);
       updateLogGame.updateGameIsProcessed(id);
     })
     .catch((err) => {
       if (err.code === 'EREQUEST') {
-        console.log('has error', id);
         updateLogGame.updateGameHasError(id);
       } else if (err.code === 'ETIMEOUT') {
         console.log(err.code, id);
