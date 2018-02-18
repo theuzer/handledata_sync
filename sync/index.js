@@ -4,8 +4,8 @@ const axios = require('axios');
 const telemetryHandler = require('./telemetryHandler');
 const dataConnection = require('../database/azureDb').dataConnection;
 const logConnection = require('../database/azureDb').logConnection;
-const constants = require('./constants');
 const updateLogGame = require('./updateLogGame');
+const constants = require('./constants');
 
 const gamesQueue = [];
 let isRunning = false;
