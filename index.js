@@ -30,7 +30,7 @@ dataConnection.connect().then(() => { console.log('data connection'); }).catch((
 logConnection.connect().then(() => { console.log('log connection'); }).catch((err) => { console.log(2, err); });
 
 app.get('/', (req, res) => {
-  res.send('hi');
+  res.send('hi...');
 });
 
 ontime({
