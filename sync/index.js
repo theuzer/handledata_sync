@@ -48,6 +48,7 @@ const checkIfGameExist = (id, gameId, stats) => {
     });
 };
 
+
 exports.syncGames = () => {
   console.time('get 2000 games');
   new sql.Request(logConnection).query(constants.getMatchesQuery)

@@ -24,3 +24,4 @@ exports.updateGameHasLeavers = (id) => {
       console.log(3, err);
     });
 };
+
