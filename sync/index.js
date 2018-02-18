@@ -50,7 +50,7 @@ const checkIfGameExist = (id, gameId, stats) => {
       }
     })
     .catch((err) => {
-      console.log(2, err);
+      console.log(2, err.code);
     });
 };
 
@@ -63,7 +63,7 @@ exports.syncGames = () => {
       });
     })
     .catch((err) => {
-      console.log(1, err);
+      console.log(1, err.code);
     });
 };
 
