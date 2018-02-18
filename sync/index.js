@@ -44,7 +44,7 @@ const checkIfGameExist = (id, gameId, stats) => {
       }
     })
     .catch((err) => {
-      console.log('checkIfGamesExist', err.code);
+      console.log('checkIfGamesExist', err);
     });
 };
 
