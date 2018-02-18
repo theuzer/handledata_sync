@@ -40,7 +40,7 @@ const checkIfGameExist = (id, gameId, stats) => {
       if (response.recordset.length === 0) {
         addGameToQueue({ id, gameId, stats });
       } else {
-        updateLogGame.updateGameAsProcessed(id);
+        updateLogGame.updateGameIsProcessed(id);
       }
     })
     .catch((err) => {

@@ -11,7 +11,7 @@ exports.updateGameHasError = (id) => {
     });
 };
 
-exports.updateGameAsProcessed = (id) => {
+exports.updateGameIsProcessed = (id) => {
   new sql.Request(logConnection).query(constants.updateGameIsProcessed(id))
     .catch((err) => {
       console.log(2, err);
