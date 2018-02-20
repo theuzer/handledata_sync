@@ -60,7 +60,7 @@ exports.syncGames = () => {
       });
     })
     .catch((err) => {
-      console.log('syncGames', err.code);
+      console.log('syncGames', err);
     });
 };
 

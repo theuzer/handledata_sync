@@ -7,6 +7,7 @@ const logConfig = {
   password: process.env.DB_LOG_PASSWORD,
   port: 1433,
   options: { encrypt: true },
+  requestTimeout: 60000,
 };
 
 const dataConfig = {
@@ -16,6 +17,7 @@ const dataConfig = {
   password: process.env.DB_DATA_PASSWORD,
   port: 1433,
   options: { encrypt: true },
+  requestTimeout: 60000,
 };
 
 const logConnection = new sql.ConnectionPool(logConfig);
