@@ -29,6 +29,14 @@ if (process.env.HEROKU_TIMER_CREATE === 'TRUE') {
 dataConnection.connect().then(() => { console.log('data connection'); }).catch((err) => { console.log(1, err); });
 logConnection.connect().then(() => { console.log('log connection'); }).catch((err) => { console.log(2, err); });
 
+dataConnection.on('error', (err) => {
+  console.log(998, err);
+});
+
+logConnection.on('error', (err) => {
+  console.log(999, err);
+});
+
 app.get('/', (req, res) => {
   res.send('hi...');
 });

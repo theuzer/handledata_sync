@@ -8,6 +8,11 @@ const logConfig = {
   port: 1433,
   options: { encrypt: true },
   requestTimeout: 60000,
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 120000,
+  },
 };
 
 const dataConfig = {
@@ -18,6 +23,11 @@ const dataConfig = {
   port: 1433,
   options: { encrypt: true },
   requestTimeout: 60000,
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 120000,
+  },
 };
 
 const logConnection = new sql.ConnectionPool(logConfig);
