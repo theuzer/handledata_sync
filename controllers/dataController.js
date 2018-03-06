@@ -53,7 +53,8 @@ exports.insertMatch = (match, id) => {
     })
     .catch((err) => {
       if (err.code === 'EREQUEST') {
-        updateLogGame.updateGameHasError(id);
+        console.log(err);
+        // updateLogGame.updateGameHasError(id);
       } else if (err.code === 'ETIMEOUT') {
         console.log(err.code, id);
       }
