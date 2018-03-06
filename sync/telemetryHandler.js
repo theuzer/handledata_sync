@@ -8,7 +8,21 @@ const extractPlayers = telemetry => filterTelemetry(telemetry, "Structures.Match
 const extractMatchFinished = telemetry => filterTelemetry(telemetry, "Structures.MatchFinishedEvent");
 const extractTalentPickEvents = telemetry => filterTelemetry(telemetry, "Structures.BattleritePickEvent");
 const extractRounds = telemetry => filterTelemetry(telemetry, "Structures.RoundFinishedEvent");
-const isRanked = players => players[0].dataObject.rankingType === 'RANKED';
+const extractTeamUpdateEvent = telemetry => filterTelemetry(telemetry, "com.stunlock.battlerite.team.TeamUpdateEvent");
+const checkIfMatchIsRanked = players => players[0].dataObject.rankingType === 'RANKED';
+
+const mapPlayerLastMatch = (teamUpdateEvent, playerCode, isRanked, matchDate) => ({
+  playerCode,
+  teamCode: teamUpdateEvent.teamID,
+  teamSize: teamUpdateEvent.teamSize,
+  division: teamUpdateEvent.division,
+  divisionRating: teamUpdateEvent.divisionRating,
+  league: teamUpdateEvent.league,
+  wins: teamUpdateEvent.wins,
+  losses: teamUpdateEvent.losses,
+  isRanked,
+  lastMatchDate: matchDate,
+});
 
 const mapTalents = (talents) => {
   const seen = {};
@@ -110,9 +124,19 @@ exports.mapTelemetry = (telemetry, id) => {
     const players = extractPlayers(telemetry);
     const talents = extractTalentPickEvents(telemetry);
     const rounds = extractRounds(telemetry);
+    const teamUpdateEvents = extractTeamUpdateEvent(telemetry);
 
     const team1 = mapTeam(1, players, talents, matchFinishEvent.teamOneScore > matchFinishEvent.teamTwoScore, rounds);
     const team2 = mapTeam(2, players, talents, matchFinishEvent.teamTwoScore > matchFinishEvent.teamOneScore, rounds);
+
+    const isRanked = checkIfMatchIsRanked(players);
+
+    const playerLastMatchList = [];
+    players.forEach((player) => {
+      const teamUpdateEvent = teamUpdateEvents.filter(x => x.dataObject.userIDs.includes(player.dataObject.accountId))[0].dataObject;
+      const playerLastMatch = mapPlayerLastMatch(teamUpdateEvent, player.dataObject.accountId, isRanked, new Date(matchStartEvent.time));
+      playerLastMatchList.push(playerLastMatch);
+    });
 
     const match = {
       mapId: matchStartEvent.mapID,
@@ -122,12 +146,13 @@ exports.mapTelemetry = (telemetry, id) => {
       type: matchStartEvent.type,
       patch: matchStartEvent.version,
       teamSize: matchStartEvent.teamSize,
-      isRanked: isRanked(players),
+      isRanked,
       numberOfRounds: rounds.length,
       team1,
       team2,
+      playerLastMatchList,
     };
 
-    dataController.doQuery(match, id);
+    dataController.insertMatch(match, id);
   }
 };
