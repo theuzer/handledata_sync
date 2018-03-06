@@ -25,3 +25,9 @@ exports.updateGameHasLeavers = (id) => {
     });
 };
 
+exports.updateGameIsProcessed2 = (id) => {
+  new sql.Request(logConnection).query(constants.updateGameIsProcessed2(id))
+    .catch((err) => {
+      console.log(2, err);
+    });
+};

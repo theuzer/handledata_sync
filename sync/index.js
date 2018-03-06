@@ -64,9 +64,44 @@ exports.syncGames = () => {
     });
 };
 
+/* TO DELETE AFTER */
+const gamesQueue2 = [];
+let isRunning2 = false;
+
+const canRun2 = () => !isRunning2 && gamesQueue2.length !== 0;
+
+const getTelemetry2 = () => {
+  const game = gamesQueue2.shift();
+  axios.get(game.stats)
+    .then((response) => {
+      telemetryHandler.mapTelemetry(response.data, game.id);
+      if (canRun()) {
+        getTelemetry2();
+      } else {
+        isRunning2 = false;
+      }
+    })
+    .catch((err) => {
+      console.log('getTelemetry', err);
+    });
+};
+
+exports.syncExistingGames = () => {
+  new sql.Request(logConnection).query(constants.toDelete)
+    .then((response) => {
+      console.log(`got ${response.recordset.length} games from process to delete...`);
+      response.recordset.forEach((game) => {
+        gamesQueue2.push({ id: game.id, stats: game.stats });
+      });
+    });
+};
+
 setInterval(() => {
   console.log(gamesQueue.length);
   if (canRun()) {
     getTelemetry();
+  }
+  if (canRun2()) {
+    getTelemetry2();
   }
 }, 10000);
