@@ -74,7 +74,7 @@ const getTelemetry2 = () => {
   const game = gamesQueue2.shift();
   axios.get(game.stats)
     .then((response) => {
-      telemetryHandler.mapTelemetry(response.data, game.id);
+      telemetryHandler.insertPlayerLastMatchList(response.data, game.id);
       if (canRun()) {
         getTelemetry2();
       } else {
