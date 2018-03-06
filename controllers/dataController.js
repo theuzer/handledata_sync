@@ -36,7 +36,6 @@ const insertTelemetry = (match) => {
     query += insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked));
   });
 
-  console.log(query);
   return query;
 };
 
