@@ -133,12 +133,10 @@ exports.mapTelemetry = (telemetry, id) => {
 
     const playerLastMatchList = [];
     players.forEach((player) => {
-      try {
-        const teamUpdateEvent = teamUpdateEvents.filter(x => x.dataObject.userIDs.includes(player.dataObject.accountId))[0].dataObject;
-        const playerLastMatch = mapPlayerLastMatch(teamUpdateEvent, player.dataObject.accountId, isRanked, new Date(matchStartEvent.time));
+      const teamUpdateEvent = teamUpdateEvents.filter(x => x.dataObject.userIDs.includes(player.dataObject.accountId));
+      if (teamUpdateEvent.length !== 0) {
+        const playerLastMatch = mapPlayerLastMatch(teamUpdateEvent[0].dataObject, player.dataObject.accountId, isRanked, new Date(matchStartEvent.time));
         playerLastMatchList.push(playerLastMatch);
-      } catch (e) {
-        console.log(e, player, matchStartEvent.matchID);
       }
     });
 
