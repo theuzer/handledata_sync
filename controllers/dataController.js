@@ -33,9 +33,10 @@ const insertTelemetry = (match) => {
   });
 
   match.playerLastMatchList.forEach((p) => {
-    query += insertPlayerLastMatch(p.playerCode, p.teamCode, p.lastMatchDate, p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, p.isRanked);
+    query += insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked));
   });
 
+  console.log(query);
   return query;
 };
 
