@@ -93,6 +93,9 @@ exports.syncExistingGames = () => {
       response.recordset.forEach((game) => {
         gamesQueue2.push({ id: game.id, stats: game.stats });
       });
+    })
+    .catch((err) => {
+      console.log('sync existing games', err);
     });
 };
 
