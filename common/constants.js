@@ -39,7 +39,7 @@ module.exports = {
     ranked: 'RANKED',
   },
   toDelete: {
-    getGames: "select top(2000) id, stats from game where isprocessed = 1 and haserror = 0 and hasleavers = 0 and isprocessed2 = 0 and logdate < '2018-3-6 16:10:00'",
+    getGames: "select top(2000) id, stats from game where isprocessed = 1 and haserror = 0 and hasleavers = 0 and isprocessed2 = 0 and logdate < '2018-3-8 12:40:00'",
     updateGameIsProcessed2: id => `update game set isProcessed2 = 1 where id = ${id}`,
   },
 };
