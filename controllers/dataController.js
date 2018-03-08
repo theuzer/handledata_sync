@@ -25,7 +25,7 @@ const insertTelemetry = (match) => {
   });
 
   match.playerLastMatchList.forEach((p) => {
-    query += constants.queries.insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked));
+    query += constants.queries.insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked), p.season, p.placementGamesLeft);
   });
 
   return query;
@@ -56,7 +56,7 @@ exports.insertMatch = (match, id) => {
 const getCenas = (playerLastMatchList) => {
   let query = "BEGIN TRANSACTION \n";
   playerLastMatchList.forEach((p) => {
-    query += constants.queries.insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked));
+    query += constants.queries.insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked), p.season, p.placementGamesLeft);
   });
   query += "\n COMMIT TRANSACTION";
   console.log(query);
