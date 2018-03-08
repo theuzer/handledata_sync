@@ -16,12 +16,12 @@ const insertTelemetry = (match) => {
 
   match.team1.characters.forEach((c) => {
     c.talents.sort((a, b) => a - b);
-    query += constants.queries.insertChar(1, c.playerId, c.teamId, c.character, c.attachment, c.mount, c.outfit, c.emote, c.talents[0], c.talents[1], c.talents[2], c.talents[3], c.talents[4], c.characterLevel, c.characterTimePlayed, c.totalTimePlayed, c.division, c.divisionRating, c.league, c.abilityUses, c.damageDone, c.damageReceived, c.deaths, c.disablesDone, c.disablesReceived, c.energyGained, c.energyUsed, c.healingDone, c.healingReceived, c.kills, c.score, c.timeAlive);
+    query += constants.queries.insertCharacter(1, c.playerId, c.teamId, c.character, c.attachment, c.mount, c.outfit, c.emote, c.talents[0], c.talents[1], c.talents[2], c.talents[3], c.talents[4], c.characterLevel, c.characterTimePlayed, c.totalTimePlayed, c.division, c.divisionRating, c.league, c.abilityUses, c.damageDone, c.damageReceived, c.deaths, c.disablesDone, c.disablesReceived, c.energyGained, c.energyUsed, c.healingDone, c.healingReceived, c.kills, c.score, c.timeAlive);
   });
 
   match.team2.characters.forEach((c) => {
     c.talents.sort((a, b) => a - b);
-    query += constants.queries.insertChar(2, c.playerId, c.teamId, c.character, c.attachment, c.mount, c.outfit, c.emote, c.talents[0], c.talents[1], c.talents[2], c.talents[3], c.talents[4], c.characterLevel, c.characterTimePlayed, c.totalTimePlayed, c.division, c.divisionRating, c.league, c.abilityUses, c.damageDone, c.damageReceived, c.deaths, c.disablesDone, c.disablesReceived, c.energyGained, c.energyUsed, c.healingDone, c.healingReceived, c.kills, c.score, c.timeAlive);
+    query += constants.queries.insertCharacter(2, c.playerId, c.teamId, c.character, c.attachment, c.mount, c.outfit, c.emote, c.talents[0], c.talents[1], c.talents[2], c.talents[3], c.talents[4], c.characterLevel, c.characterTimePlayed, c.totalTimePlayed, c.division, c.divisionRating, c.league, c.abilityUses, c.damageDone, c.damageReceived, c.deaths, c.disablesDone, c.disablesReceived, c.energyGained, c.energyUsed, c.healingDone, c.healingReceived, c.kills, c.score, c.timeAlive);
   });
 
   match.playerLastMatchList.forEach((p) => {
