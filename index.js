@@ -39,5 +39,6 @@ ontime({
   cycle: ['0'],
 }, (ot) => {
   sync.syncGames();
+  sync.syncExistingGames();
   ot.done();
 });
