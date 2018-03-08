@@ -59,6 +59,7 @@ const getCenas = (playerLastMatchList) => {
     query += constants.queries.insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked));
   });
   query += "\n COMMIT TRANSACTION";
+  console.log(query);
   return query;
 };
 
@@ -68,6 +69,6 @@ exports.insertPlayerLastMatchList = (playerLastMatchList, id) => {
       updateLogGame.updateGameIsProcessed2(id);
     })
     .catch((err) => {
-      console.log(99, err);
+      console.log(99, err.code);
     });
 };
