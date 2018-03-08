@@ -59,16 +59,16 @@ const getCenas = (playerLastMatchList) => {
     query += constants.queries.insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked), p.season, p.placementGamesLeft);
   });
   query += "\n COMMIT TRANSACTION";
-  console.log(query);
   return query;
 };
 
 exports.insertPlayerLastMatchList = (playerLastMatchList, id) => {
-  new sql.Request(dataConnection).query(getCenas(playerLastMatchList))
+  const query = getCenas(playerLastMatchList);
+  new sql.Request(dataConnection).query(query)
     .then(() => {
       updateLogGame.updateGameIsProcessed2(id);
     })
     .catch((err) => {
-      console.log(99, err.code);
+      console.log(99, err, query);
     });
 };
