@@ -23,3 +23,12 @@ exports.updateGameHasLeavers = (id) => {
       console.log(constants.errors.updateGameHasLeavers, err);
     });
 };
+
+/* TO DELETE */
+exports.updateGameIsProcessed2 = (id) => {
+  new sql.Request(logConnection).query(constants.toDelete.updateGameIsProcessed2(id))
+    .catch((err) => {
+      console.log(2, err);
+      console.log(constants.errors.updateGameHasLeavers, err);
+    });
+};

@@ -10,7 +10,7 @@ module.exports = {
     insertCharacter: (teamNo, playerCode, teamCode, championCode, attach, mount, outfit, emote, br1, br2, br3, br4, br5, champLevel, champTime, totalTime, division, divisionRating, league, abilityUses, damageDone, damageReceived, deaths, disablesDone, disablesReceived, energyGained, energyUsed, healingDone, healingReceived, kills, score, timeAlive) => `EXECUTE InsertCharacter @gameTeamId = @team${teamNo}Id, @playerCode = ${playerCode}, @teamCode = ${teamCode}, @championCode = ${championCode}, @attachmentCode = ${attach}, @emoteCode = ${emote}, @mountCode = ${mount}, @outfitCode = ${outfit}, @br1 = ${br1}, @br2 = ${br2}, @br3 = ${br3}, @br4 = ${br4}, @br5 = ${br5}, @championLevel = ${champLevel}, @championTimePlayed = ${champTime}, @totalTimePlayed = ${totalTime}, @division = ${division}, @divisionRating = ${divisionRating}, @league = ${league}, @abilityUses = ${abilityUses}, @damageDone = ${damageDone}, @damageReceived = ${damageReceived}, @deaths = ${deaths}, @disablesDone = ${disablesDone}, @disablesReceived = ${disablesReceived}, @energyGained = ${energyGained}, @energyUsed = ${energyUsed}, @healingDone = ${healingDone}, @healingReceived = ${healingReceived}, @kills = ${kills}, @score = ${score}, @timeAlive = ${timeAlive};`,
     insertMatch: (matchId, map, region, gameType, patch, isRanked, teamSize, date, numberOfRounds) => `EXEC @matchId = InsertMatch '${matchId}', '${map}', '${region}', '${gameType}', '${patch}', ${isRanked}, ${teamSize}, '${date}', ${numberOfRounds};`,
     insertTeam: (teamNo, teamNumber, isWin) => `EXECUTE @team${teamNo}Id = InsertTeam @matchId, ${teamNumber}, ${isWin};`,
-    insertPlayerLastMatch: (playerCode, teamCode, lastMatchDate, teamSize, league, division, divisionRating, wins, losses, isRanked) => `EXECUTE InsertPlayerLastMatch ${playerCode}, ${teamCode}, '${lastMatchDate}', ${teamSize}, ${league}, ${division}, ${divisionRating}, ${wins}, ${losses}, ${isRanked};`,
+    insertPlayerLastMatch: (playerCode, teamCode, lastMatchDate, teamSize, league, division, divisionRating, wins, losses, isRanked, season, placementGamesLeft) => `EXECUTE InsertPlayerLastMatch ${playerCode}, ${teamCode}, '${lastMatchDate}', ${teamSize}, ${league}, ${division}, ${divisionRating}, ${wins}, ${losses}, ${isRanked}, ${season}, ${placementGamesLeft};`,
   },
   transactionErrors: {
     request: 'EREQUEST',
@@ -37,5 +37,9 @@ module.exports = {
     roundFinish: 'Structures.RoundFinishedEvent',
     teamUpdate: 'com.stunlock.battlerite.team.TeamUpdateEvent',
     ranked: 'RANKED',
+  },
+  toDelete: {
+    getGames: "select top(2000) id, stats from game where isprocessed = 1 and haserror = 0 and hasleavers = 0 and isprocessed2 = 0 and logdate < '2018-3-6 16:10:00'",
+    updateGameIsProcessed2: id => `update game set isProcessed2 = 1 where id = ${id}`,
   },
 };

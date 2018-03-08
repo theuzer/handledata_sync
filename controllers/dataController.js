@@ -51,3 +51,23 @@ exports.insertMatch = (match, id) => {
       }
     });
 };
+
+/* TO DELETE */
+const getCenas = (playerLastMatchList) => {
+  let query = "BEGIN TRANSACTION \n";
+  playerLastMatchList.forEach((p) => {
+    query += constants.queries.insertPlayerLastMatch(p.playerCode, p.teamCode, dateBuilder(p.lastMatchDate), p.teamSize, p.league, p.division, p.divisionRating, p.wins, p.losses, boolBuilder(p.isRanked));
+  });
+  query += "\n COMMIT TRANSACTION";
+  return query;
+};
+
+exports.insertPlayerLastMatchList = (playerLastMatchList, id) => {
+  new sql.Request(dataConnection).query(getCenas(playerLastMatchList))
+    .then(() => {
+      updateLogGame.updateGameIsProcessed2(id);
+    })
+    .catch((err) => {
+      console.log(99, err.code);
+    });
+};

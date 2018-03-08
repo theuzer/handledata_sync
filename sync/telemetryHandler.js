@@ -159,3 +159,21 @@ exports.mapTelemetry = (telemetry, id) => {
     dataController.insertMatch(match, id);
   }
 };
+
+/* TO DELETE */
+exports.insertPlayerLastMatch = (telemetry, id) => {
+  const matchStartEvent = extractMatchStart(telemetry)[0].dataObject;
+  const players = extractPlayers(telemetry);
+  const teamUpdateEvents = extractTeamUpdateEvent(telemetry);
+  const isRanked = checkIfMatchIsRanked(players);
+  const playerLastMatchList = [];
+  players.forEach((player) => {
+    const teamUpdateEvent = teamUpdateEvents.filter(x => x.dataObject.userIDs.includes(player.dataObject.accountId));
+    if (teamUpdateEvent.length !== 0) {
+      const playerLastMatch = mapPlayerLastMatch(teamUpdateEvent[0].dataObject, player.dataObject.accountId, isRanked, new Date(matchStartEvent.time));
+      playerLastMatchList.push(playerLastMatch);
+    }
+  });
+
+  dataController.insertPlayerLastMatchList(playerLastMatchList, id);
+};
