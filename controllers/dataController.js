@@ -68,6 +68,6 @@ exports.insertPlayerLastMatchList = (playerLastMatchList, id) => {
       updateLogGame.updateGameIsProcessed2(id);
     })
     .catch((err) => {
-      console.log(99, err.code);
+      console.log(99, err);
     });
 };
