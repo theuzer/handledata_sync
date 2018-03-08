@@ -5,6 +5,7 @@ const https = require('https');
 const sync = require('./sync/index');
 const dataConnection = require('./database/azureDb').dataConnection;
 const logConnection = require('./database/azureDb').logConnection;
+const constants = require('./common/constants');
 
 const port = process.env.PORT || 3000;
 
@@ -26,25 +27,17 @@ if (process.env.HEROKU_TIMER_CREATE === 'TRUE') {
   }, parseInt(process.env.HEROKU_APP_TIMER, 10));
 }
 
-dataConnection.connect().then(() => { console.log('data connection'); }).catch((err) => { console.log(1, err); });
-logConnection.connect().then(() => { console.log('log connection'); }).catch((err) => { console.log(2, err); });
+dataConnection.connect().then(() => { console.log('data connection'); }).catch((err) => { console.log(constants.errors.dataOnConnection, err); });
+logConnection.connect().then(() => { console.log('log connection'); }).catch((err) => { console.log(constants.errors.logOnConnection, err); });
 
-dataConnection.on('error', (err) => {
-  console.log(998, err);
-});
+dataConnection.on('error', (err) => { console.log(constants.errors.dataConnection, err); });
+logConnection.on('error', (err) => { console.log(constants.errors.logConnection, err); });
 
-logConnection.on('error', (err) => {
-  console.log(999, err);
-});
-
-app.get('/', (req, res) => {
-  res.send('hi...');
-});
+app.get('/', (req, res) => { res.send('test'); });
 
 ontime({
   cycle: ['0'],
 }, (ot) => {
   sync.syncGames();
-  sync.syncExistingGames();
   ot.done();
 });

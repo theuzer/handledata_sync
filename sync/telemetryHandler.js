@@ -1,15 +1,16 @@
 const dataController = require('../controllers/dataController');
 const updateLogGame = require('./updateLogGame');
+const constants = require('../common/constants');
 
 // const sortByTimestamp = telemetry => telemetry.sort((a, b) => a.cursor - b.cursor);
 const filterTelemetry = (telemetry, type) => telemetry.filter(x => x.type === type);
-const extractMatchStart = telemetry => filterTelemetry(telemetry, "Structures.MatchStart");
-const extractPlayers = telemetry => filterTelemetry(telemetry, "Structures.MatchReservedUser");
-const extractMatchFinished = telemetry => filterTelemetry(telemetry, "Structures.MatchFinishedEvent");
-const extractTalentPickEvents = telemetry => filterTelemetry(telemetry, "Structures.BattleritePickEvent");
-const extractRounds = telemetry => filterTelemetry(telemetry, "Structures.RoundFinishedEvent");
-const extractTeamUpdateEvent = telemetry => filterTelemetry(telemetry, "com.stunlock.battlerite.team.TeamUpdateEvent");
-const checkIfMatchIsRanked = players => players[0].dataObject.rankingType === 'RANKED';
+const extractMatchStart = telemetry => filterTelemetry(telemetry, constants.telemetry.matchStart);
+const extractPlayers = telemetry => filterTelemetry(telemetry, constants.telemetry.user);
+const extractMatchFinished = telemetry => filterTelemetry(telemetry, constants.telemetry.matchFinish);
+const extractTalentPickEvents = telemetry => filterTelemetry(telemetry, constants.telemetry.pickBattlerite);
+const extractRounds = telemetry => filterTelemetry(telemetry, constants.telemetry.roundFinish);
+const extractTeamUpdateEvent = telemetry => filterTelemetry(telemetry, constants.telemetry.teamUpdate);
+const checkIfMatchIsRanked = players => players[0].dataObject.rankingType === constants.telemetry.ranked;
 
 const mapPlayerLastMatch = (teamUpdateEvent, playerCode, isRanked, matchDate) => ({
   playerCode,
@@ -157,21 +158,4 @@ exports.mapTelemetry = (telemetry, id) => {
 
     dataController.insertMatch(match, id);
   }
-};
-
-exports.insertPlayerLastMatch = (telemetry, id) => {
-  const matchStartEvent = extractMatchStart(telemetry)[0].dataObject;
-  const players = extractPlayers(telemetry);
-  const teamUpdateEvents = extractTeamUpdateEvent(telemetry);
-  const isRanked = checkIfMatchIsRanked(players);
-  const playerLastMatchList = [];
-  players.forEach((player) => {
-    const teamUpdateEvent = teamUpdateEvents.filter(x => x.dataObject.userIDs.includes(player.dataObject.accountId));
-    if (teamUpdateEvent.length !== 0) {
-      const playerLastMatch = mapPlayerLastMatch(teamUpdateEvent[0].dataObject, player.dataObject.accountId, isRanked, new Date(matchStartEvent.time));
-      playerLastMatchList.push(playerLastMatch);
-    }
-  });
-
-  dataController.insertPlayerLastMatchList(playerLastMatchList, id);
 };

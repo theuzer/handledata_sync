@@ -31,9 +31,7 @@ const dataConfig = {
 };
 
 const logConnection = new sql.ConnectionPool(logConfig);
-
 const dataConnection = new sql.ConnectionPool(dataConfig);
 
 exports.logConnection = logConnection;
-
 exports.dataConnection = dataConnection;
