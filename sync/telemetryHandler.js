@@ -23,6 +23,8 @@ const mapPlayerLastMatch = (teamUpdateEvent, playerCode, isRanked, matchDate) =>
   losses: teamUpdateEvent.losses,
   isRanked,
   lastMatchDate: matchDate,
+  season: teamUpdateEvent.season,
+  placementGamesLeft: teamUpdateEvent.placementGamesLeft,
 });
 
 const mapTalents = (talents) => {
