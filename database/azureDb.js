@@ -9,7 +9,7 @@ const logConfig = {
   options: { encrypt: true },
   requestTimeout: 60000,
   pool: {
-    max: 10,
+    max: 100,
     min: 0,
     idleTimeoutMillis: 120000,
   },
@@ -24,7 +24,7 @@ const dataConfig = {
   options: { encrypt: true },
   requestTimeout: 60000,
   pool: {
-    max: 10,
+    max: 100,
     min: 0,
     idleTimeoutMillis: 120000,
   },
